@@ -1,0 +1,18 @@
+# Fichiers à ignorer lors du build Docker
+node_modules
+dist
+.git
+.env
+*.pyc
+__pycache__
+.pytest_cache
+*.log
+.vscode
+.idea
+*.md
+projects/*
+!projects/.gitkeep
+backend/__pycache__
+tests/__pycache__
+*.stl
+trace.txt

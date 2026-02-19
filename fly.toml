@@ -1,0 +1,35 @@
+# Configuration Fly.io pour DELTA
+app = "delta-assistant"
+primary_region = "cdg" # Paris - plus proche de toi
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT = "8080"
+  PYTHONUNBUFFERED = "1"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false  # Pas de mise en veille
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/status"
+
+# Ressources (plan gratuit)
+[vm]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 256
+
+# Volumes pour persistance (optionnel)
+# [mounts]
+#   source = "delta_data"
+#   destination = "/app/projects"
