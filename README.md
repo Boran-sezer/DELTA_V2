@@ -9,7 +9,6 @@ Il utilise **Google Gemini 2.5 Flash (audio natif en streaming)** pour comprendr
 * naviguer sur le web
 * exécuter du code
 * gérer des projets
-* contrôler certains appareils connectés
 
 L’interface est une application **desktop Electron + React**, connectée à un backend **Python (FastAPI + Socket.IO)**.
 
@@ -17,19 +16,16 @@ L’interface est une application **desktop Electron + React**, connectée à un
 
 # ⚙️ Stack technique
 
-| Couche        | Technologie                                |
-| ------------- | ------------------------------------------ |
-| IA / Voix     | Google Gemini 2.5 Flash Native Audio       |
-| Backend       | Python, FastAPI, Socket.IO (uvicorn)       |
-| Frontend      | React 18, Vite, TailwindCSS, Framer Motion |
-| Desktop       | Electron 28                                |
-| Vision        | MediaPipe (hand tracking + face landmarks) |
-| TTS           | Edge TTS / Kokoro-82M / pyttsx3            |
-| Contrôle PC   | PyAutoGUI, psutil, subprocess              |
-| Web Agent     | Playwright + Gemini Vision                 |
-| CAD           | build123d                                  |
-| Smart Home    | python-kasa                                |
-| Impression 3D | Moonraker API                              |
+| Couche      | Technologie                                |
+| ----------- | ------------------------------------------ |
+| IA / Voix   | Google Gemini 2.5 Flash Native Audio       |
+| Backend     | Python, FastAPI, Socket.IO (uvicorn)       |
+| Frontend    | React 18, Vite, TailwindCSS, Framer Motion |
+| Desktop     | Electron                                   |
+| Vision      | MediaPipe                                  |
+| TTS         | Edge TTS / Kokoro / pyttsx3                |
+| Contrôle PC | PyAutoGUI, psutil, subprocess              |
+| Web Agent   | Playwright + Gemini Vision                 |
 
 ---
 
@@ -56,13 +52,15 @@ git clone https://github.com/ton-user/delta-v2.git
 cd delta-v2
 ```
 
+---
+
 ### 2 — Configurer la clé API
 
 ```bash
 cp .env.example .env
 ```
 
-Puis modifier `.env` :
+Modifier ensuite `.env` :
 
 ```
 GEMINI_API_KEY=ta_cle_api
@@ -89,7 +87,7 @@ npm install
 
 ### 5 — Lancer DELTA
 
-Option simple :
+Méthode rapide :
 
 ```bash
 lancer_delta.bat
@@ -123,7 +121,6 @@ delta_v2/
 │   ├── voice_commander.py
 │   ├── pc_control.py
 │   ├── web_agent.py
-│   ├── self_coding_agent.py
 │   └── settings.json
 │
 ├── src/
@@ -136,7 +133,6 @@ delta_v2/
 ├── projects/
 ├── backups/
 ├── public/
-├── .env
 ├── lancer_delta.bat
 └── requirements.txt
 ```
@@ -148,9 +144,9 @@ delta_v2/
 ## Voix et conversation
 
 * conversation vocale en temps réel
-* transcription utilisateur et IA en streaming
-* interruption automatique quand l'utilisateur parle
-* synthèse vocale (Edge TTS ou local)
+* transcription en streaming
+* synthèse vocale
+* interaction via interface chat
 
 ---
 
@@ -158,24 +154,15 @@ delta_v2/
 
 DELTA peut :
 
-* ouvrir ou fermer des applications
-* déplacer la souris
-* cliquer et scroller
+* ouvrir certaines applications
+* fermer des applications
+* contrôler la souris
 * taper du texte
 * utiliser des raccourcis clavier
-* exécuter des commandes système
-* capturer l’écran
+* exécuter certaines commandes système
 
----
-
-## Interface
-
-* application desktop Electron
-* modules déplaçables et redimensionnables
-* visualiseur audio 3D
-* gestion de projets
-* sélection micro / haut-parleur / webcam
-* horloge et statut en temps réel
+⚠️ **Le contrôle du PC est encore expérimental.**
+Certaines actions peuvent ne pas fonctionner correctement selon les applications ou la configuration Windows.
 
 ---
 
@@ -185,86 +172,71 @@ DELTA peut naviguer automatiquement sur internet :
 
 * ouvrir des pages
 * cliquer
-* remplir des formulaires
+* remplir des champs
 * analyser des pages avec Gemini Vision
 
 ---
 
 ## Mode Open Interpreter
 
-* installation de logiciels
-* création de fichiers
-* exécution de code Python
-* analyse d’écran
+Permet à DELTA de :
 
----
-
-## Authentification faciale
-
-* reconnaissance faciale avec MediaPipe
-* écran de verrouillage au démarrage
-* configurable dans les paramètres
-
----
-
-## Self-Coding Agent
-
-DELTA peut modifier son propre code :
-
-1. analyse la demande utilisateur
-2. génère une modification
-3. crée un backup
-4. applique la modification
-
-Les sauvegardes sont stockées dans `/backups`.
+* installer des logiciels
+* créer et modifier des fichiers
+* exécuter du code Python
+* analyser l’écran
 
 ---
 
 # ⚠️ Limitations actuelles
 
-Certaines fonctionnalités sont encore expérimentales :
+Certaines fonctionnalités sont encore **en développement ou partiellement fonctionnelles**.
 
-* détection d’applications parfois incomplète
-* précision variable du hand tracking
-* Web Agent bloqué par certains sites protégés
-* Self-Coding Agent encore instable sur gros changements
+### Self-Coding Agent
+
+Le système d’auto-codage est **expérimental**.
+
+DELTA peut générer du code et proposer des modifications, mais **les modifications ne sont pas encore intégrées automatiquement dans son propre code source**.
+
+Le système sert actuellement surtout à **générer ou suggérer du code**, pas à modifier directement le programme.
+
+---
+
+### Contrôle du PC
+
+Le contrôle du système (souris, clavier, ouverture d’applications) **n’est pas encore parfaitement fiable**.
+
+Certaines applications peuvent :
+
+* ne pas être détectées
+* ne pas s’ouvrir correctement
+* ignorer certaines commandes.
+
+---
+
+### Authentification faciale
+
+La fonctionnalité **d’authentification par reconnaissance faciale n’est plus utilisée dans cette version** du projet.
+
+Le système a été retiré mais certaines références peuvent encore apparaître dans le code.
 
 ---
 
 # 🧩 Fonctionnalités prévues
 
-* mémoire persistante (vector database)
+Fonctionnalités prévues pour les prochaines versions :
+
+* mémoire persistante (historique intelligent)
 * support multi-langues
 * système de plugins
-* interface web accessible sur réseau local
-* support modèles locaux (Ollama)
-* intégration CAD complète
-* notifications système Windows
+* interface web accessible sur le réseau local
+* support de modèles IA locaux
+* amélioration du contrôle du PC
+* architecture d’agents spécialisés
 
 ---
 
 # 🔧 Configuration
-
-### `settings.json`
-
-```
-backend/settings.json
-```
-
-Exemple :
-
-```json
-{
-  "face_auth_enabled": false,
-  "tool_permissions": {
-    "write_file": true,
-    "read_file": true,
-    "run_web_agent": true
-  }
-}
-```
-
----
 
 ### `.env`
 
@@ -276,21 +248,22 @@ GEMINI_API_KEY=ta_cle_api_gemini
 
 # 🧪 API Backend
 
-DELTA expose une API REST locale :
+Le backend expose une API REST locale :
 
 ```
 http://localhost:8000
 ```
 
-| Route            | Description       |
-| ---------------- | ----------------- |
-| `/status`        | statut du serveur |
-| `/pc/open`       | ouvrir une app    |
-| `/pc/close`      | fermer une app    |
-| `/pc/click`      | clic souris       |
-| `/pc/type`       | écrire du texte   |
-| `/pc/hotkey`     | raccourci clavier |
-| `/pc/screenshot` | capture écran     |
+Exemples d’endpoints :
+
+| Route            | Description            |
+| ---------------- | ---------------------- |
+| `/status`        | statut du serveur      |
+| `/pc/open`       | ouvrir une application |
+| `/pc/close`      | fermer une application |
+| `/pc/type`       | écrire du texte        |
+| `/pc/hotkey`     | raccourci clavier      |
+| `/pc/screenshot` | capture d’écran        |
 
 ---
 
